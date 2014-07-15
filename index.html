@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<title>Go Playground Sample</title>
+		<style>
+p {
+	-webkit-margin-after: 0em;
+	-webkit-margin-before: 0em;
+}
+		</style>
+	</head>
+	<body>
+		<textarea cols=80 rows=20>package main
+
+import "fmt"
+import "time"
+
+func main() {
+	for i := 0; i &lt; 3; i++ {
+		fmt.Println("hello")
+		time.Sleep(1 * time.Second)
+	}
+}
+		</textarea>
+		<input type="button" value="Run">
+		<div id="output"></div>
+
+		<script src="///ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script>
+
+$(function(){
+	$("input").click(function(){
+		var prog = $.trim($("textarea").val());
+		console.log(prog);
+		var id = new Date();
+		$("div").html("loading...");
+		$.ajax(
+			"http://localhost:8877/compile",
+			{
+				"data": {"body": prog, "version": "2"},
+				"cors_logging": "true", 
+				"type": "post"
+			}
+		).done(function(resp){
+			$("div").html("");
+			if (resp.compile_errors) {
+				$("div").text(resp.compile_errors);
+				return;
+			}
+			if (resp.Errors) {
+				$("div").text(resp.Errors);
+				return;
+			}
+			var id_now = id;
+			console.log(resp)
+			var next = function(){
+				if (id_now != id) return;
+				$("div").append("<p >" + resp.Events[0].Message + "</p>");
+				resp.Events.shift();
+				if (resp.Events.length != 0) {
+					window.setTimeout(next, resp.Events[0].Delay / 1000000)
+				} else {
+					$("div").append("<p style='color: #666'>Program exited.</p>");
+				}
+			}
+			window.setTimeout(next, resp.Events[0].Delay / 1000000);
+		})
+	})
+})
+
+		</script>
+	</body>
+</html>

@@ -4,7 +4,7 @@ Javascript. It adds appropriate CORS headers for cross site usage.
 play.golang guys have given me permission to use this only for represent. So it
 should only be used by a represent generated slide.
 
-Demo: [play.amitu.com](play.amitu.com).
+Demo: [play.amitu.com](http://play.amitu.com).
 
 PS: play.golang guys let you use
 [this service](http://blog.golang.org/playground) if you want to use this for

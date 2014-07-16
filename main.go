@@ -12,12 +12,13 @@ var (
 )
 
 func main() {
-	flag.StringVar(&hostport, "http", ":8877", "HTTP host:port")
+	flag.StringVar(&hostport, "http", ":8879", "HTTP host:port")
 	flag.Parse()
 
 	fs := http.FileServer(rice.MustFindBox("public").HTTPBox())
 	http.Handle("/", fs)
 
 	log.Printf("Started webserver at %s.", hostport)
-	http.ListenAndServe(hostport, &CORSMiddleware{http.DefaultServeMux})
+	log.Fatal(http.ListenAndServe(hostport, &CORSMiddleware{http.DefaultServeMux}))
+	log.Printf("Stopped webserver at %s.", hostport)
 }

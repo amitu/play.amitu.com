@@ -1,3 +1,5 @@
 play.amitu.com
 .vendor
 Goopfile.lock
+*.log
+public.rice-box.go

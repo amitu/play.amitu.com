@@ -1,8 +1,13 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 	_ "code.google.com/p/go.tools/playground"
+)
+
+var (
+	Agent string
 )
 
 type RepresentTransport struct {
@@ -10,7 +15,7 @@ type RepresentTransport struct {
 }
 
 func (t *RepresentTransport) RoundTrip(req *http.Request) (*http.Response, error) { 
-	req.Header.Set("User-Agent", "represent")
+	req.Header.Set("User-Agent", Agent)
 	return t.Transport.RoundTrip(req)
 }
 
@@ -34,5 +39,6 @@ func (m *CORSMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
+	flag.StringVar(&Agent, "agent", "represent", "User-Agent for play.golang.org")
 	http.DefaultClient.Transport = &RepresentTransport{}
 }
